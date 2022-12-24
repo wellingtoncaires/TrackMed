@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tm-base/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tm-citizen/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tm-citizen/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tm-discovery-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tm-gateway/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tm-hospital/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tm-medic/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tm-mock/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tm-pharmacy/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/tm-pharmacy/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

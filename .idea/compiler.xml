@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="tm-discovery-server" />
+        <module name="tm-gateway" />
+        <module name="tm-hospital" />
+        <module name="tm-base" />
+        <module name="tm-mock" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="tm-base" target="17" />
+      <module name="tm-citizen" target="17" />
+      <module name="tm-citizien" target="17" />
+      <module name="tm-citzien" target="17" />
+      <module name="tm-medic" target="17" />
+      <module name="tm-pharmacy" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="tm-base" options="-parameters" />
+      <module name="tm-citizen" options="-parameters" />
+      <module name="tm-citizien" options="-parameters" />
+      <module name="tm-citzien" options="-parameters" />
+      <module name="tm-discovery-server" options="-parameters" />
+      <module name="tm-gateway" options="-parameters" />
+      <module name="tm-hospital" options="-parameters" />
+      <module name="tm-medic" options="-parameters" />
+      <module name="tm-mock" options="-parameters" />
+      <module name="tm-pharmacy" options="-parameters" />
+    </option>
+  </component>
+</project>
