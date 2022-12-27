@@ -20,9 +20,9 @@
         <module>tm-discovery-server</module>
         <module>tm-gateway</module>
         <module>tm-hospital</module>
+        <module>tm-pharmacy</module>
 <!--        <module>tm-medic</module>-->
 <!--        <module>tm-citizen</module>-->
-<!--        <module>tm-pharmacy</module>-->
 <!--        <module>tm-base</module>-->
         <module>tm-mock</module>
     </modules>

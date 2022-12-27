@@ -1,7 +1,7 @@
 package com.trackmed.tmmock.application.resources;
 
 import com.trackmed.tmmock.application.services.HospitalService;
-import com.trackmed.tmmock.domains.Hospital;
+import com.trackmed.tmmock.domains.entities.Hospital;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

@@ -1,5 +1,6 @@
 package com.trackmed.tmhospital.domains.entities;
 
+import com.trackmed.tmhospital.domains.model.Hospital;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -38,9 +39,8 @@ public class Appointment implements Serializable {
 //    @JoinColumn(name = "patient_id", nullable = false)
 //    private Patient patient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hospital_id", nullable = false)
-    private Hospital hospital;
+    @Column(name = "hospital_id", nullable = false)
+    private UUID hospital;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "receptionist_id", nullable = false)

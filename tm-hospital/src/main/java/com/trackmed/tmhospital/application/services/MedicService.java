@@ -1,11 +1,12 @@
 package com.trackmed.tmhospital.application.services;
 
-import com.trackmed.tmhospital.domains.entities.Hospital;
+import com.trackmed.tmhospital.domains.model.Hospital;
 import com.trackmed.tmhospital.domains.entities.Medic;
 import com.trackmed.tmhospital.domains.enums.Speciality;
 import com.trackmed.tmhospital.exceptions.HospitalException;
-import com.trackmed.tmhospital.infra.repository.MedicCustomRepository;
-import com.trackmed.tmhospital.infra.repository.MedicRepository;
+import com.trackmed.tmhospital.infra.clients.MockResourceClient;
+import com.trackmed.tmhospital.infra.repositories.MedicCustomRepository;
+import com.trackmed.tmhospital.infra.repositories.MedicRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,7 +25,7 @@ public class MedicService {
 
     private final MedicRepository medicRepository;
     private final MedicCustomRepository medicCustomRepository;
-    private final HospitalService hospitalService;
+    private final MockResourceClient hospitalService;
 
     /** start class Medic */
     /** TODO: Método para testes na fase de desenvolvimento, remover */
@@ -65,7 +66,12 @@ public class MedicService {
     }
 
     public List<Medic> findMedicByHospitalId(UUID hospitalId) {
-        return medicRepository.findByHospital(hospitalService.findHospitalById(hospitalId));
+        Hospital hospital = findHospitalById(hospitalId);
+        return medicRepository.findByHospital(hospital);
+    }
+
+    public Hospital findHospitalById(UUID id) {
+        return  hospitalService.findHospital(id).getBody();
     }
 
 //    public List<Medic> findMedicByRegulatoryMedicBody(RegulatoryMedicBody regulatoryMedicBody) {
@@ -101,9 +107,9 @@ public class MedicService {
         if(medic == null) {
             throw new HospitalException("Nenhum médico informado!");
         }
-        if(medic.getId() != null && hospitalService.existsHospital(medic.getId())) {
-            throw new HospitalException("Jã existe um médico com o código " + medic.getId() + " cadastrado!");
-        }
+//        if(medic.getId() != null && hospitalService.existsHospital(medic.getId())) {
+//            throw new HospitalException("Já existe um médico com o código " + medic.getId() + " cadastrado!");
+//        }
     }
 
     private void validateOnUpdateMedic(Medic medic, UUID id) {
@@ -138,9 +144,9 @@ public class MedicService {
         }if(medicId == null) {
             throw new HospitalException("Nenhum médico informado!");
         }
-        Hospital hospital = hospitalService.findHospitalById(hospitalId);
+        Hospital hospital = findHospitalById(hospitalId);
         Medic medic = findMedicById(medicId);
-        medic.setHospital(hospital);
+        medic.setHospital(hospital.getId());
         medicRepository.save(medic);
     }
 

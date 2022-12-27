@@ -2,6 +2,7 @@ package com.trackmed.tmhospital.domains.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.trackmed.tmhospital.domains.enums.Speciality;
+import com.trackmed.tmhospital.domains.model.Hospital;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -39,9 +38,8 @@ public class Medic implements Serializable {
     @Column(name = "medic_id")
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hospital_id", nullable = false)
-    private Hospital hospital;
+    @Column(name = "hospital_id", nullable = false)
+    private UUID hospital;
 
     @Column(nullable = false)
     private String name;
@@ -70,7 +68,7 @@ public class Medic implements Serializable {
 //
 //    private List<Speciality> specialities;
 
-    public Medic(Hospital hospital, String name, String lastName, Date birthDate, String cpf, String email,
+    public Medic(UUID hospital, String name, String lastName, Date birthDate, String cpf, String email,
                  String username, String password, List<UUID> listRegulatoryMedicBody,
                  List<Speciality> specialities) {
         this.hospital = hospital;

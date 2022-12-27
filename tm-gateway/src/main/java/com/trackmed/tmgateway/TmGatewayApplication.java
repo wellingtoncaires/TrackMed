@@ -21,8 +21,8 @@ public class TmGatewayApplication {
 				.routes()
 					.route(r -> r.path("/v1/hospital/**").uri("lb://tm-hospital") )
 					.route(r -> r.path("/v1/mock/**").uri("lb://tm-mock") )
-					.route(r -> r.path("/v1/medico/**").uri("lb://tm-hospital") )
 					.route(r -> r.path("/v1/cidadao/**").uri("lb://tm-citizen") )
+					.route(r -> r.path("/v1/farmacia/**").uri("lb://tm-pharmacy") )
 				.build();
 	}
 }

@@ -1,8 +1,8 @@
 package com.trackmed.tmmock.application.resources;
 
 import com.trackmed.tmmock.application.services.MedicService;
-import com.trackmed.tmmock.domains.Medic;
-import com.trackmed.tmmock.domains.RegulatoryMedicBody;
+import com.trackmed.tmmock.domains.entities.Medic;
+import com.trackmed.tmmock.domains.entities.RegulatoryMedicBody;
 import com.trackmed.tmmock.domains.enums.Speciality;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,13 +79,12 @@ public class MedicResource {
 
     @PostMapping(path = "adiciona-registro")
     public ResponseEntity saveRegister(@RequestParam("id") UUID id, @RequestBody RegulatoryMedicBody register) {
-        log.info("saveRegister");
         service.addRegisterToMedic(id, register);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping()
-    public ResponseEntity removeRegisterToMedc(@RequestParam("idMedic") UUID idMedic, @RequestParam("idRegulatory") UUID idRegulatory) {
+    public ResponseEntity removeRegisterToMedic(@RequestParam("idMedic") UUID idMedic, @RequestParam("idRegulatory") UUID idRegulatory) {
         service.removeRegisterToMedic(idMedic, idRegulatory);
         return ResponseEntity.ok().build();
     }

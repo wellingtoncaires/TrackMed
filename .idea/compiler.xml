@@ -7,11 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="tm-discovery-server" />
         <module name="tm-gateway" />
         <module name="tm-hospital" />
+        <module name="tm-discovery-server" />
         <module name="tm-base" />
         <module name="tm-mock" />
+        <module name="tm-pharmacy" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -20,7 +21,6 @@
       <module name="tm-citizien" target="17" />
       <module name="tm-citzien" target="17" />
       <module name="tm-medic" target="17" />
-      <module name="tm-pharmacy" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

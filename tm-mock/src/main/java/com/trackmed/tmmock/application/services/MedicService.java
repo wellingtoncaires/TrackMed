@@ -1,12 +1,12 @@
 package com.trackmed.tmmock.application.services;
 
-import com.trackmed.tmmock.domains.Medic;
-import com.trackmed.tmmock.domains.RegulatoryMedicBody;
+import com.trackmed.tmmock.domains.entities.Medic;
+import com.trackmed.tmmock.domains.entities.RegulatoryMedicBody;
 import com.trackmed.tmmock.domains.enums.Speciality;
 import com.trackmed.tmmock.exceptions.MockException;
-import com.trackmed.tmmock.infra.repository.MedicCustomRepository;
-import com.trackmed.tmmock.infra.repository.MedicRepository;
-import com.trackmed.tmmock.infra.repository.RegulatoryMedicBodyRepository;
+import com.trackmed.tmmock.infra.repositories.MedicCustomRepository;
+import com.trackmed.tmmock.infra.repositories.MedicRepository;
+import com.trackmed.tmmock.infra.repositories.RegulatoryMedicBodyRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

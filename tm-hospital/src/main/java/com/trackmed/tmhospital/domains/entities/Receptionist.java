@@ -1,6 +1,7 @@
 package com.trackmed.tmhospital.domains.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.trackmed.tmhospital.domains.model.Hospital;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,9 +38,9 @@ public class Receptionist implements Serializable {
     @Column(name = "receptionist_id")
     private UUID id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "hospital_id")
-    private Hospital hospital;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "hospital_id")
+    private UUID hospital;
 
     @Column(nullable = false)
     private String name;
@@ -63,7 +64,8 @@ public class Receptionist implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    public Receptionist(Hospital hospital, String name, String lastName, Date birthDate, String cpf, String email, String username, String password) {
+    public Receptionist(UUID hospital, String name, String lastName, Date birthDate, String cpf,
+                        String email, String username, String password) {
         this.hospital = hospital;
         this.name = name;
         this.lastName = lastName;

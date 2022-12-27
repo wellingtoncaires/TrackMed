@@ -1,10 +1,9 @@
 package com.trackmed.tmhospital.application.resources;
 
-import com.trackmed.tmhospital.application.services.HospitalService;
 import com.trackmed.tmhospital.application.services.MedicService;
 import com.trackmed.tmhospital.domains.entities.Medic;
 import com.trackmed.tmhospital.domains.enums.Speciality;
-import com.trackmed.tmhospital.infra.repository.clients.MedicResourceClient;
+import com.trackmed.tmhospital.infra.clients.MockResourceClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -24,56 +23,56 @@ import java.util.UUID;
 
 @Service
 @RestController
-@RequestMapping("v1/medico")
+@RequestMapping("v1/hospital/medico")
 @RequiredArgsConstructor
 @Slf4j
 public class MedicResource {
 
     private final MedicService service;
-    private final MedicResourceClient medicClient;
+    private final MockResourceClient hospitalClient;
 
     /** TODO: Método para testes na fase de desenvolvimento, remover */
     @GetMapping()
     public ResponseEntity<List<Medic>> findAll() {
         log.info("findAll ");
         List<Medic> medics = service.findAllMedics();
-        return ResponseEntity.ok().body(medics);
+        return ResponseEntity.ok(medics);
     }
 
     @GetMapping(params = "id")
     public ResponseEntity<Medic> findMedic(@RequestParam("id") UUID id) {
         Medic medic = service.findMedicById(id);
-        return ResponseEntity.ok().body(medic);
+        return ResponseEntity.ok(medic);
     }
 
     @GetMapping(params = "nome-de-usuario")
     public ResponseEntity<Medic> findMedicByUsername(@RequestParam("nome-de-usuario") String username) {
         Medic medic = service.findMedicByUsername(username);
-        return ResponseEntity.ok().body(medic);
+        return ResponseEntity.ok(medic);
     }
 
     @GetMapping(params = "cpf")
     public ResponseEntity<Medic> findMedicByCpf(@RequestParam("cpf") String cpf) {
         Medic medic = service.findMedicByCpf(cpf);
-        return ResponseEntity.ok().body(medic);
+        return ResponseEntity.ok(medic);
     }
 
     @GetMapping(params = "email")
     public ResponseEntity<Medic> findMedicByEmail(@RequestParam("email") String email) {
         Medic medic = service.findMedicByEmail(email);
-        return ResponseEntity.ok().body(medic);
+        return ResponseEntity.ok(medic);
     }
 
     @GetMapping(params = "hospital-id")
     public ResponseEntity<List<Medic>> findMedicByHospitalId(@RequestParam("hospital-id") UUID hospitalId) {
         List<Medic> medics = service.findMedicByHospitalId(hospitalId);
-        return ResponseEntity.ok().body(medics);
+        return ResponseEntity.ok(medics);
     }
 
     @GetMapping(params = "especialidade-medica")
     public ResponseEntity<List<Medic>> findMedicsBySpeciality(@RequestParam("especialidade-medica") String specialityString) {
         List<Medic> medics = service.findMedicsBySpeciality(specialityString);
-        return ResponseEntity.ok().body(medics);
+        return ResponseEntity.ok(medics);
     }
 
     @PostMapping
@@ -105,6 +104,7 @@ public class MedicResource {
 
     @GetMapping(path = "especialidades")
     public ResponseEntity<List<Speciality>> getAllSpecialities() {
-        return medicClient.getAllSpecialities();
+        log.info("getAllSpecialities");
+        return hospitalClient.getAllSpecialities();
     }
 }

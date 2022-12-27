@@ -1,10 +1,10 @@
 package com.trackmed.tmmock.application.services;
 
-import com.trackmed.tmmock.domains.Hospital;
+import com.trackmed.tmmock.domains.entities.Hospital;
 import com.trackmed.tmmock.exceptions.MockException;
-import com.trackmed.tmmock.infra.repository.HospitalRepository;
-import com.trackmed.tmmock.infra.repository.MedicCustomRepository;
-import com.trackmed.tmmock.infra.repository.MedicRepository;
+import com.trackmed.tmmock.infra.repositories.HospitalRepository;
+import com.trackmed.tmmock.infra.repositories.MedicCustomRepository;
+import com.trackmed.tmmock.infra.repositories.MedicRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,6 +32,9 @@ public class HospitalService {
         Optional<Hospital> hospital = hospitalRepository.findById(id);
         if(hospital.isEmpty()) {
             throw new MockException("Não existe hospital com o código " + id + " cadastrado!");
+        }
+        if(!hospital.get().isOperationalLicense()) {
+            throw new MockException("O hospital  " + hospital.get().getName() + " está com sua licença inativa!");
         }
         return hospital.get();
     }
@@ -76,6 +79,7 @@ public class HospitalService {
         if(hospital.isEmpty()) {
             throw new MockException("Não existe hospital com o código " + id + "!");
         }
-        hospitalRepository.delete(hospital.get());
+        hospital.get().setOperationalLicense(false);
+        hospitalRepository.save(hospital.get());
     }
 }

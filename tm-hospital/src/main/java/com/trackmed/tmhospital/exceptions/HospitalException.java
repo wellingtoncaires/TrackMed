@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class HospitalException extends RuntimeException implements Serializable {
-    private static final long serialVErsionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
 
     public HospitalException(String message) {
