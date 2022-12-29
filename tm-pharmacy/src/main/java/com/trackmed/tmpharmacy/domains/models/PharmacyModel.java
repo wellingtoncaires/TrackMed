@@ -4,7 +4,7 @@ import lombok.Data;
 import java.util.UUID;
 
 @Data
-public class Pharmacy {
+public class PharmacyModel {
 
     private UUID id;
     private String name;

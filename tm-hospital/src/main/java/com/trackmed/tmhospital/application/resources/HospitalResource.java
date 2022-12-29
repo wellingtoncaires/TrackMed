@@ -1,7 +1,7 @@
 package com.trackmed.tmhospital.application.resources;
 
 import com.trackmed.tmhospital.application.services.HospitalService;
-import com.trackmed.tmhospital.domains.model.Hospital;
+import com.trackmed.tmhospital.domains.models.HospitalModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ public class HospitalResource {
     private final HospitalService service;
 
     @GetMapping
-    public ResponseEntity<List<Hospital>> findAllHospital()  {
+    public ResponseEntity<List<HospitalModel>> findAllHospital()  {
         return service.findAllHospital();
     }
 

@@ -1,6 +1,6 @@
 package com.trackmed.tmhospital.infra.repositories;
 
-import com.trackmed.tmhospital.domains.model.Hospital;
+import com.trackmed.tmhospital.domains.models.HospitalModel;
 import com.trackmed.tmhospital.domains.entities.Receptionist;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -16,5 +16,5 @@ public interface ReceptionistRepository extends JpaRepository<Receptionist, UUID
     Optional<Receptionist> findByUsername(String username);
     Optional<Receptionist> findByEmail(String email);
     Optional<Receptionist> findByCpf(String cpf);
-    List<Receptionist> findByHospital(Hospital hospital);
+    List<Receptionist> findByHospital(HospitalModel hospital);
 }

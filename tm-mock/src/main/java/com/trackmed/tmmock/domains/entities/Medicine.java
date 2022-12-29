@@ -1,13 +1,12 @@
-package com.trackmed.tmhospital.domains.entities;
+package com.trackmed.tmmock.domains.entities;
 
+import com.trackmed.tmmock.domains.enums.MedicineType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,46 +14,37 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "HOS_T_RECEPTIONIST")
+@Table(name = "MOCK_T_MEDICINE")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class Receptionist implements Serializable {
+public class Medicine implements Serializable {
     public static final long serialVersionUID=1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "receptionist_id")
+    @Column(name = "medicine_id")
     private UUID id;
 
-    @Column(name = "id_hospital")
-    private UUID hospital;
+    @Column(nullable = false)
+    private String activePrinciple;
 
     @Column(nullable = false)
-    private String name;
+    private MedicineType medicineType;
 
     @Column(nullable = false)
-    private String lastName;
-
-    @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    private Date birthDate;
+    private String commercialName;
 
     @Column(nullable = false)
-    private String cpf;
+    private Double posology;
 
-    @Column(unique = true, nullable = false)
-    private String email;
+    @Column(nullable = false)
+    private String company;
 
-    @Column(unique = true, nullable = false)
-    private String username;
-
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
+    private boolean approved;
 }

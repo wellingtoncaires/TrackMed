@@ -1,4 +1,4 @@
-package com.trackmed.tmhospital.domains.model;
+package com.trackmed.tmhospital.domains.models;
 
 import lombok.Data;
 
@@ -13,6 +13,6 @@ public class MedicModel {
     private String lastName;
     private Date birthDate;
     private String cpf;
-    private RegulatoryMedicBody regulatoryBody;
+    private RegulatoryMedicBodyModel regulatoryBody;
 
 }

@@ -26,7 +26,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("v1/mock/medicos")
 @RequiredArgsConstructor
-@Slf4j
 public class MedicResource {
 
     private final MedicService service;

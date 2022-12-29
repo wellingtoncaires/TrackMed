@@ -2,7 +2,8 @@ package com.trackmed.tmhospital.infra.clients;
 
 import com.trackmed.tmhospital.domains.entities.Medic;
 import com.trackmed.tmhospital.domains.enums.Speciality;
-import com.trackmed.tmhospital.domains.model.Hospital;
+import com.trackmed.tmhospital.domains.models.HospitalModel;
+import com.trackmed.tmhospital.domains.models.MedicineModel;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,20 +18,40 @@ import java.util.UUID;
 public interface MockResourceClient {
 
     @GetMapping(path = "/hospitais")
-    ResponseEntity<List<Hospital>> findAll();
+    ResponseEntity<List<HospitalModel>> findAll();
 
     @GetMapping(path = "/hospitais", params = "id")
-    ResponseEntity<Hospital> findHospital(@RequestParam("id") UUID id);
+    ResponseEntity<HospitalModel> findHospital(@RequestParam("id") UUID id);
 
     @PutMapping(path = "/hospitais", params = "id")
-    ResponseEntity<Hospital> updateHospital(@RequestParam("id") UUID id, @RequestBody Hospital hospital);
+    ResponseEntity<HospitalModel> updateHospital(@RequestParam("id") UUID id, @RequestBody HospitalModel hospital);
 
     @GetMapping(path = "/medicos/especialidades")
     ResponseEntity<List<Speciality>> getAllSpecialities();
 
     @GetMapping(path = "/medicos")
-    public ResponseEntity<List<Medic>> findAllMedics();
+    ResponseEntity<List<Medic>> findAllMedics();
 
     @GetMapping(path = "/medicos", params = "cpf")
-    public ResponseEntity<Medic> findMedicByCpf(@RequestParam("cpf") String cpf);
+    ResponseEntity<Medic> findMedicByCpf(@RequestParam("cpf") String cpf);
+
+    @GetMapping(path = "medicamentos")
+    ResponseEntity<List<MedicineModel>> getAllMedicines();
+
+    @GetMapping(path = "medicamentos", params = "principio-ativo")
+    ResponseEntity<List<MedicineModel>> getByActivePrinciple(@RequestParam("principio-ativo") String activePrinciple);
+
+    @GetMapping(path = "medicamentos", params = "tipo-de-medicamento")
+    ResponseEntity<List<MedicineModel>> getByMedicineType(@RequestParam("tipo-de-medicamento") String medicineType);
+
+    @GetMapping(path = "medicamentos", params = "fabricante")
+    ResponseEntity<List<MedicineModel>> getByCompanyName(@RequestParam("fabricante") String company);
+
+    @GetMapping(path = "medicamentos", params = "id")
+    ResponseEntity<MedicineModel> getMedicineById(@RequestParam("id") UUID id);
+
+    @GetMapping(path = "medicamentos", params = "nome-comercial")
+    ResponseEntity<MedicineModel> getByCommercialName(@RequestParam("id") String commercialName);
+
+
 }

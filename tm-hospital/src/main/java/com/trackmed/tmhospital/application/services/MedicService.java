@@ -1,6 +1,6 @@
 package com.trackmed.tmhospital.application.services;
 
-import com.trackmed.tmhospital.domains.model.Hospital;
+import com.trackmed.tmhospital.domains.models.HospitalModel;
 import com.trackmed.tmhospital.domains.entities.Medic;
 import com.trackmed.tmhospital.domains.enums.Speciality;
 import com.trackmed.tmhospital.exceptions.CommunicationMicroServiceException;
@@ -10,12 +10,10 @@ import com.trackmed.tmhospital.infra.repositories.MedicCustomRepository;
 import com.trackmed.tmhospital.infra.repositories.MedicRepository;
 import feign.FeignException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -92,11 +90,11 @@ public class MedicService {
     }
 
     public List<Medic> findMedicByHospitalId(UUID hospitalId) {
-        Hospital hospital = findHospitalById(hospitalId);
-        return medicRepository.findByHospital(hospital);
+        HospitalModel hospitalModel = findHospitalById(hospitalId);
+        return medicRepository.findByHospital(hospitalModel);
     }
 
-    public Hospital findHospitalById(UUID id) {
+    public HospitalModel findHospitalById(UUID id) {
         try {
             return  mockResourceClient.findHospital(id).getBody();
         }catch (FeignException.FeignClientException e) {
@@ -186,9 +184,9 @@ public class MedicService {
         }if(medicId == null) {
             throw new HospitalException("Nenhum médico informado!");
         }
-        Hospital hospital = findHospitalById(hospitalId);
+        HospitalModel hospitalModel = findHospitalById(hospitalId);
         Medic medic = findMedicById(medicId);
-        medic.setHospital(hospital.getId());
+        medic.setHospital(hospitalModel.getId());
         medicRepository.save(medic);
     }
 

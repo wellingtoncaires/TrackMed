@@ -24,16 +24,16 @@ import java.util.UUID;
 @Slf4j
 public class MedicService {
 
-    private final MedicRepository medicRepository;
+    private final MedicRepository repository;
     private final MedicCustomRepository medicCustomRepository;
     private final RegulatoryMedicBodyRepository regulatoryMedicBodyRepository;
 
     public List<Medic> findAllMedics() {
-        return medicRepository.findAll();
+        return repository.findAll();
     }
 
     public Medic findMedicById(UUID id) {
-        Optional<Medic> medic = medicRepository.findById(id);
+        Optional<Medic> medic = repository.findById(id);
         if(medic.isEmpty()) {
             throw new MockException("Não existe médico com o código " + id + " cadastrado!");
         }
@@ -41,7 +41,7 @@ public class MedicService {
     }
 
     public Medic findMedicByCpf(String cpf) {
-        Optional<Medic> medic = medicRepository.findByCpf(cpf);
+        Optional<Medic> medic = repository.findByCpf(cpf);
         if(medic.isEmpty()) {
             throw new MockException("Não existe médico com o CPF " + cpf + " cadastrado!");
         }
@@ -53,16 +53,16 @@ public class MedicService {
     }
 
     public boolean existsMedic(UUID id) {
-        return medicRepository.findById(id).isPresent();
+        return repository.findById(id).isPresent();
     }
 
     public boolean existsMedic(String cpf) {
-        return medicRepository.findByCpf(cpf).isPresent();
+        return repository.findByCpf(cpf).isPresent();
     }
 
     public Medic saveMedic(Medic medic) {
         validateOnSaveMedic(medic);
-        return medicRepository.save(medic);
+        return repository.save(medic);
     }
 
     private void validateOnSaveMedic(Medic medic) {
@@ -89,7 +89,7 @@ public class MedicService {
 
     public Medic updateMedic(Medic medic) {
         validateOnUpdateMedic(medic);
-        return medicRepository.save(medic);
+        return repository.save(medic);
     }
 
     public void validateRegisterUpdateToMedic(Medic medic, RegulatoryMedicBody regulatoryMedicBody) {
@@ -120,7 +120,7 @@ public class MedicService {
         regulatoryMedicBody.setEnabled(true);
         regulatoryMedicBody = regulatoryMedicBodyRepository.save(regulatoryMedicBody);
         medic.getListRegulatoryMedicBody().add(regulatoryMedicBody);
-        medicRepository.save(medic);
+        repository.save(medic);
     }
 
     @Transactional
@@ -134,7 +134,7 @@ public class MedicService {
         }
         registers.remove(regulatoryMedicBody);
         medic.setListRegulatoryMedicBody(registers);
-        medicRepository.save(medic);
+        repository.save(medic);
     }
 
     public RegulatoryMedicBody findRegulatoryMedicBodyById(UUID idRegulatory) {

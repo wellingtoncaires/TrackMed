@@ -1,4 +1,4 @@
-package com.trackmed.tmhospital.domains.model;
+package com.trackmed.tmhospital.domains.models;
 
 import com.trackmed.tmhospital.domains.enums.Speciality;
 import lombok.Data;
@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
-public class RegulatoryMedicBody {
+public class RegulatoryMedicBodyModel {
 
     private UUID id;
     private String medicName;

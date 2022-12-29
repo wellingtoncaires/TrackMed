@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Data
-public class RegulatoryPharmaceuticalBody {
+public class RegulatoryPharmaceuticalBodyModel {
 
     private UUID id;
     private String pharmaceuticalName;

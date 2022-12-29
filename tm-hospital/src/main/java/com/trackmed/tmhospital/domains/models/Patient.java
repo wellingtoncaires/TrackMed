@@ -1,4 +1,4 @@
-package com.trackmed.tmhospital.domains.model;
+package com.trackmed.tmhospital.domains.models;
 
 import lombok.Data;
 

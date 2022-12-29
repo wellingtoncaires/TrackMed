@@ -21,15 +21,15 @@ import java.util.UUID;
 @Slf4j
 public class PharmaceuticalService {
 
-    private final PharmaceuticalRepository pharmaceuticalRepository;
+    private final PharmaceuticalRepository repository;
     private final RegulatoryPharmaceuticalBodyRepository regulatoryPharmaceuticalBodyRepository;
 
     public List<Pharmaceutical> findAllPharmaceuticals() {
-        return pharmaceuticalRepository.findAll();
+        return repository.findAll();
     }
 
     public Pharmaceutical findPharmaceuticalById(UUID id) {
-        Optional<Pharmaceutical> pharmaceutical = pharmaceuticalRepository.findById(id);
+        Optional<Pharmaceutical> pharmaceutical = repository.findById(id);
         if (pharmaceutical.isEmpty()) {
             throw new MockException("Não existe farmacêutico com o código " + id + " cadasrado!");
         }
@@ -37,7 +37,7 @@ public class PharmaceuticalService {
     }
 
     public Pharmaceutical findPharmaceuticalByCpf(String cpf) {
-        Optional<Pharmaceutical> pharmaceutical = pharmaceuticalRepository.findByCpf(cpf);
+        Optional<Pharmaceutical> pharmaceutical = repository.findByCpf(cpf);
         if (pharmaceutical.isEmpty()) {
             throw new MockException("Não existe farmacêutico com o cpf " + cpf + " cadasrado!");
         }
@@ -45,16 +45,16 @@ public class PharmaceuticalService {
     }
 
     public boolean existsPharmaceutical(UUID id) {
-        return pharmaceuticalRepository.findById(id).isPresent();
+        return repository.findById(id).isPresent();
     }
 
     public boolean existsPharmaceutical(String cpf) {
-        return pharmaceuticalRepository.findByCpf(cpf).isPresent();
+        return repository.findByCpf(cpf).isPresent();
     }
 
     public Pharmaceutical savePharmaceutical(Pharmaceutical pharmaceutical) {
         validateOnSavePharmaceutical(pharmaceutical);
-        return pharmaceuticalRepository.save(pharmaceutical);
+        return repository.save(pharmaceutical);
     }
 
     public void validateOnSavePharmaceutical(Pharmaceutical pharmaceutical) {
@@ -72,7 +72,7 @@ public class PharmaceuticalService {
 
     public Pharmaceutical updatePharmaceutical(Pharmaceutical pharmaceutical) {
         validateOnUpdatePharmaceutical(pharmaceutical);
-        return pharmaceuticalRepository.save(pharmaceutical);
+        return repository.save(pharmaceutical);
     }
 
     public void validateOnUpdatePharmaceutical(Pharmaceutical pharmaceutical) {
@@ -94,7 +94,7 @@ public class PharmaceuticalService {
         regulatoryPharmaceuticalBody.setEnabled(true);
         regulatoryPharmaceuticalBodyRepository.save(regulatoryPharmaceuticalBody);
         pharmaceutical.setRegulatoryBody(regulatoryPharmaceuticalBody);
-        pharmaceuticalRepository.save(pharmaceutical);
+        repository.save(pharmaceutical);
     }
 
     public void validateRegisterToPharmaceutical(Pharmaceutical pharmaceutical, RegulatoryPharmaceuticalBody regulatoryPharmaceuticalBody) {

@@ -1,7 +1,6 @@
 package com.trackmed.tmpharmacy.application.resources;
 
 import com.trackmed.tmpharmacy.domains.models.Pharmaceutical;
-import com.trackmed.tmpharmacy.domains.models.Pharmacy;
 import com.trackmed.tmpharmacy.infra.clients.MockResourceClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

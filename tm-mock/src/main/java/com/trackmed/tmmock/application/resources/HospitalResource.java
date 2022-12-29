@@ -22,7 +22,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("v1/mock/hospitais")
 @RequiredArgsConstructor
-@Slf4j
 public class HospitalResource {
 
     private final HospitalService service;
@@ -30,15 +29,14 @@ public class HospitalResource {
     /** TODO: Método para testes na fase de desenvolvimento, remover */
     @GetMapping()
     public ResponseEntity<List<Hospital>> findAllHospitals() {
-        log.info("findAll ");
         List<Hospital> hospitals = service.findAllHospital();
-        return ResponseEntity.ok().body(hospitals);
+        return ResponseEntity.ok(hospitals);
     }
 
     @GetMapping(params = "id")
     public ResponseEntity<Hospital> findHospital(@RequestParam("id") UUID id) {
         Hospital hospital = service.findHospitalById(id);
-        return ResponseEntity.ok().body(hospital);
+        return ResponseEntity.ok(hospital);
     }
 
     @PostMapping

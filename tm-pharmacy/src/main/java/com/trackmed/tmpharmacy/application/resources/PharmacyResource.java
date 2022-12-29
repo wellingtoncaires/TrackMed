@@ -1,6 +1,6 @@
 package com.trackmed.tmpharmacy.application.resources;
 
-import com.trackmed.tmpharmacy.domains.models.Pharmacy;
+import com.trackmed.tmpharmacy.domains.models.PharmacyModel;
 import com.trackmed.tmpharmacy.infra.clients.MockResourceClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +22,12 @@ public class PharmacyResource {
     private final MockResourceClient mockResourceClient;
 
     @GetMapping
-    public ResponseEntity<List<Pharmacy>> findAllPharmacies() {
+    public ResponseEntity<List<PharmacyModel>> findAllPharmacies() {
         return mockResourceClient.findAllPharmacies();
     }
 
     @GetMapping(params = "id")
-    public ResponseEntity<Pharmacy> findPharmacyById(@RequestParam("id") UUID id) {
+    public ResponseEntity<PharmacyModel> findPharmacyById(@RequestParam("id") UUID id) {
         return mockResourceClient.findPharmacyById(id);
     }
 }

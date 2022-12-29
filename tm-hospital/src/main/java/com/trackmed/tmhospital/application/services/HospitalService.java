@@ -1,6 +1,6 @@
 package com.trackmed.tmhospital.application.services;
 
-import com.trackmed.tmhospital.domains.model.Hospital;
+import com.trackmed.tmhospital.domains.models.HospitalModel;
 import com.trackmed.tmhospital.exceptions.CommunicationMicroServiceException;
 import com.trackmed.tmhospital.exceptions.HospitalException;
 import com.trackmed.tmhospital.infra.clients.MockResourceClient;
@@ -20,7 +20,7 @@ public class HospitalService {
 
     private final MockResourceClient mockResourceClient;
 
-    public ResponseEntity<List<Hospital>> findAllHospital() {
+    public ResponseEntity<List<HospitalModel>> findAllHospital() {
         try {
             return mockResourceClient.findAll();
         }catch (FeignException.FeignClientException e) {
@@ -28,7 +28,7 @@ public class HospitalService {
         }
     }
 
-    public ResponseEntity<Hospital> findHospitalById(@RequestParam UUID id) {
+    public ResponseEntity<HospitalModel> findHospitalById(@RequestParam UUID id) {
         try {
             return mockResourceClient.findHospital(id);
         }catch (FeignException.FeignClientException e) {

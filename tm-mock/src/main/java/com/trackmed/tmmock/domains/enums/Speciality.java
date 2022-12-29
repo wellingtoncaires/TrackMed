@@ -1,8 +1,10 @@
 package com.trackmed.tmmock.domains.enums;
 
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public enum Speciality {
     ALERGISTA("ALERGISTA"),
     ANESTESISTA("ANESTESISTA"),

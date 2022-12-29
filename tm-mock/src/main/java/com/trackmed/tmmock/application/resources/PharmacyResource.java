@@ -22,7 +22,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("v1/mock/farmacias")
 @RequiredArgsConstructor
-@Slf4j
 public class PharmacyResource {
 
     private final PharmacyService service;

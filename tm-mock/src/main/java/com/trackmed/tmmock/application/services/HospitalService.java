@@ -3,8 +3,6 @@ package com.trackmed.tmmock.application.services;
 import com.trackmed.tmmock.domains.entities.Hospital;
 import com.trackmed.tmmock.exceptions.MockException;
 import com.trackmed.tmmock.infra.repositories.HospitalRepository;
-import com.trackmed.tmmock.infra.repositories.MedicCustomRepository;
-import com.trackmed.tmmock.infra.repositories.MedicRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,18 +16,15 @@ import java.util.UUID;
 @Slf4j
 public class HospitalService {
 
-    private final HospitalRepository hospitalRepository;
-    private final MedicRepository medicRepository;
-    private final MedicCustomRepository medicCustomRepository;
+    private final HospitalRepository repository;
 
     /** TODO: Método para testes na fase de desenvolvimento, remover */
     public List<Hospital> findAllHospital() {
-        return hospitalRepository.findAll();
+        return repository.findAll();
     }
 
-    /** Start class Medic */
     public Hospital findHospitalById(UUID id) {
-        Optional<Hospital> hospital = hospitalRepository.findById(id);
+        Optional<Hospital> hospital = repository.findById(id);
         if(hospital.isEmpty()) {
             throw new MockException("Não existe hospital com o código " + id + " cadastrado!");
         }
@@ -40,12 +35,12 @@ public class HospitalService {
     }
 
     public boolean existsHospital(UUID id) {
-        return hospitalRepository.findById(id).isPresent();
+        return repository.findById(id).isPresent();
     }
 
     public Hospital saveHospital(Hospital hospital) {
         validateOnSaveHospital(hospital);
-        return hospitalRepository.save(hospital);
+        return repository.save(hospital);
     }
 
     private void validateOnSaveHospital(Hospital hospital) {
@@ -68,15 +63,15 @@ public class HospitalService {
 
     public Hospital updateHospital(Hospital hospital) {
         validateOnUpdateHospital(hospital);
-        return hospitalRepository.save(hospital);
+        return repository.save(hospital);
     }
 
     public void deleteHospital(UUID id) {
-        Optional<Hospital> hospital = hospitalRepository.findById(id);
+        Optional<Hospital> hospital = repository.findById(id);
         if(hospital.isEmpty()) {
             throw new MockException("Não existe hospital com o código " + id + "!");
         }
         hospital.get().setOperationalLicense(false);
-        hospitalRepository.save(hospital.get());
+        repository.save(hospital.get());
     }
 }

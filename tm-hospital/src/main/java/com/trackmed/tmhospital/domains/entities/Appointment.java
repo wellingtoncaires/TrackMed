@@ -1,6 +1,5 @@
 package com.trackmed.tmhospital.domains.entities;
 
-import com.trackmed.tmhospital.domains.model.Hospital;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

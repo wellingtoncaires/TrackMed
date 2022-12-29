@@ -2,15 +2,11 @@ package com.trackmed.tmhospital.domains.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.trackmed.tmhospital.domains.enums.Speciality;
-import com.trackmed.tmhospital.domains.model.Hospital;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
