@@ -1,7 +1,7 @@
 package com.trackmed.tmhospital.application.resources;
 
+import com.trackmed.tmhospital.application.services.HospitalService;
 import com.trackmed.tmhospital.domains.model.Hospital;
-import com.trackmed.tmhospital.infra.clients.MockResourceClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,15 +17,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class HospitalResource {
 
-    private final MockResourceClient hospitalResourceClient;
+    private final HospitalService service;
 
     @GetMapping
-    public ResponseEntity<List<Hospital>> findAllHospital() {
-        return hospitalResourceClient.findAll();
+    public ResponseEntity<List<Hospital>> findAllHospital()  {
+        return service.findAllHospital();
     }
 
     @GetMapping(params = "id")
-    public ResponseEntity<Hospital> findHospitalById(@RequestParam UUID id) {
-        return hospitalResourceClient.findHospital(id);
+    public ResponseEntity findHospitalById(@RequestParam UUID id) {
+        return service.findHospitalById(id);
     }
 }

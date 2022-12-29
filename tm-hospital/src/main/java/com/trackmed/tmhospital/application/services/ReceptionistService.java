@@ -5,6 +5,7 @@ import com.trackmed.tmhospital.domains.entities.Receptionist;
 import com.trackmed.tmhospital.exceptions.HospitalException;
 import com.trackmed.tmhospital.infra.clients.MockResourceClient;
 import com.trackmed.tmhospital.infra.repositories.ReceptionistRepository;
+import com.trackmed.tmhospital.security.SecurityBeans;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ import java.util.UUID;
 public class ReceptionistService {
 
     private final ReceptionistRepository receptionistRepository;
-    private final MockResourceClient hospitalService;
+    private final MockResourceClient mockResourceClient;
 
     public List<Receptionist> findAll() {
         return receptionistRepository.findAll();
@@ -58,7 +59,8 @@ public class ReceptionistService {
     }
 
     public Hospital findHospitalById(UUID id) {
-        return hospitalService.findHospital(id).getBody();
+        var hospital = mockResourceClient.findHospital(id).getBody();
+        return hospital;
     }
 
     public List<Receptionist> findReceptionistByHospital(UUID idHospital) {
@@ -71,15 +73,15 @@ public class ReceptionistService {
         return receptionistRepository.findById(id).isPresent();
     }
 
-    public Receptionist saveReceptionist(Receptionist receptionist, UUID idHospital) {
-        Hospital hospital = findHospitalById(idHospital);
-        validateOnSaveReceptionist(receptionist, hospital);
-        receptionist.setHospital(hospital.getId());
+    public Receptionist saveReceptionist(Receptionist receptionist) {
+        validateOnSaveReceptionist(receptionist);
+        receptionist.setPassword(new SecurityBeans().passwordEncoder().encode(receptionist.getPassword()));
         return receptionistRepository.save(receptionist);
     }
 
-    public void validateOnSaveReceptionist(Receptionist receptionist, Hospital hospital) {
-        if(hospital == null) {
+    public void validateOnSaveReceptionist(Receptionist receptionist) {
+
+        if(mockResourceClient.findHospital(receptionist.getHospital()).getBody() == null) {
             throw new HospitalException("Hospital inválido!");
         }
         if(existsReceptionistByCpf(receptionist.getCpf())) {

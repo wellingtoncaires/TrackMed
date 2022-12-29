@@ -3,7 +3,6 @@ package com.trackmed.tmhospital.application.resources;
 import com.trackmed.tmhospital.application.services.MedicService;
 import com.trackmed.tmhospital.domains.entities.Medic;
 import com.trackmed.tmhospital.domains.enums.Speciality;
-import com.trackmed.tmhospital.infra.clients.MockResourceClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +22,16 @@ import java.util.UUID;
 
 @Service
 @RestController
-@RequestMapping("v1/hospital/medico")
+@RequestMapping("v1/hospital/medicos")
 @RequiredArgsConstructor
-@Slf4j
 public class MedicResource {
 
     private final MedicService service;
-    private final MockResourceClient hospitalClient;
 
     /** TODO: Método para testes na fase de desenvolvimento, remover */
     @GetMapping()
     public ResponseEntity<List<Medic>> findAll() {
-        log.info("findAll ");
-        List<Medic> medics = service.findAllMedics();
-        return ResponseEntity.ok(medics);
+        return service.findAllMedicsClients();
     }
 
     @GetMapping(params = "id")
@@ -52,9 +47,8 @@ public class MedicResource {
     }
 
     @GetMapping(params = "cpf")
-    public ResponseEntity<Medic> findMedicByCpf(@RequestParam("cpf") String cpf) {
-        Medic medic = service.findMedicByCpf(cpf);
-        return ResponseEntity.ok(medic);
+    public ResponseEntity findMedicByCpf(@RequestParam("cpf") String cpf) {
+        return service.findMedicClientByCpf(cpf);
     }
 
     @GetMapping(params = "email")
@@ -104,7 +98,6 @@ public class MedicResource {
 
     @GetMapping(path = "especialidades")
     public ResponseEntity<List<Speciality>> getAllSpecialities() {
-        log.info("getAllSpecialities");
-        return hospitalClient.getAllSpecialities();
+        return service.getAllSpecialitiesClient();
     }
 }

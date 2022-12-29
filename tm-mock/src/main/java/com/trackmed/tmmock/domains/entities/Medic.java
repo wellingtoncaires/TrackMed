@@ -49,13 +49,5 @@ public class Medic implements Serializable {
     private String cpf;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<RegulatoryMedicBody> listRegulatoryMedicBody = new ArrayList<>();;
-
-//    public Medic(String name, String lastName, Date birthDate, String cpf) {
-//        this.name = name;
-//        this.lastName = lastName;
-//        this.birthDate = birthDate;
-//        this.cpf = cpf;
-//        this.listRegulatoryMedicBody = new ArrayList<>();
-//    }
+    private List<RegulatoryMedicBody> listRegulatoryMedicBody = new ArrayList<>();
 }

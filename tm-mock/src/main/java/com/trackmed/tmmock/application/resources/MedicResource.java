@@ -24,7 +24,7 @@ import java.util.UUID;
 
 @Service
 @RestController
-@RequestMapping("v1/mock/medico")
+@RequestMapping("v1/mock/medicos")
 @RequiredArgsConstructor
 @Slf4j
 public class MedicResource {
@@ -33,7 +33,7 @@ public class MedicResource {
 
     /** TODO: Método para testes na fase de desenvolvimento, remover */
     @GetMapping()
-    public ResponseEntity<List<Medic>> findAll() {
+    public ResponseEntity<List<Medic>> findAllMedics() {
         List<Medic> medics = service.findAllMedics();
         return ResponseEntity.ok(medics);
     }

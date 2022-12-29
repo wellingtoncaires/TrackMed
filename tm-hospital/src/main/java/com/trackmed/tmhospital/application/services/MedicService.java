@@ -3,14 +3,20 @@ package com.trackmed.tmhospital.application.services;
 import com.trackmed.tmhospital.domains.model.Hospital;
 import com.trackmed.tmhospital.domains.entities.Medic;
 import com.trackmed.tmhospital.domains.enums.Speciality;
+import com.trackmed.tmhospital.exceptions.CommunicationMicroServiceException;
 import com.trackmed.tmhospital.exceptions.HospitalException;
 import com.trackmed.tmhospital.infra.clients.MockResourceClient;
 import com.trackmed.tmhospital.infra.repositories.MedicCustomRepository;
 import com.trackmed.tmhospital.infra.repositories.MedicRepository;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -20,17 +26,37 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class MedicService {
 
     private final MedicRepository medicRepository;
     private final MedicCustomRepository medicCustomRepository;
-    private final MockResourceClient hospitalService;
+    private final MockResourceClient mockResourceClient;
 
     /** start class Medic */
     /** TODO: Método para testes na fase de desenvolvimento, remover */
     public List<Medic> findAllMedics() {
         return medicRepository.findAll();
+    }
+
+    public ResponseEntity<Medic> findMedicClientByCpf(@RequestParam("cpf") String cpf) {
+        try {
+            return mockResourceClient.findMedicByCpf(cpf);
+        }catch (FeignException.FeignClientException e) {
+            int httpStatus = e.status();
+            if(e.status() == HttpStatus.NOT_FOUND.value()) {
+                throw new HospitalException("Médico não encontrado!");
+            }
+            throw new CommunicationMicroServiceException(e.getMessage(), httpStatus);
+        }
+    }
+
+    public ResponseEntity<List<Medic>> findAllMedicsClients() {
+        try {
+            return mockResourceClient.findAllMedics();
+        }catch (FeignException.FeignClientException e) {
+            int httpStatus = e.status();
+            throw new CommunicationMicroServiceException(e.getMessage(), httpStatus);
+        }
     }
 
     public Medic findMedicById(UUID id) {
@@ -71,12 +97,28 @@ public class MedicService {
     }
 
     public Hospital findHospitalById(UUID id) {
-        return  hospitalService.findHospital(id).getBody();
+        try {
+            return  mockResourceClient.findHospital(id).getBody();
+        }catch (FeignException.FeignClientException e) {
+            int httpStatus = e.status();
+            if(e.status() == HttpStatus.NOT_FOUND.value()) {
+                throw new HospitalException("Hospital não encontrado!");
+            }
+            throw new CommunicationMicroServiceException(e.getMessage(), httpStatus);
+        }
     }
 
 //    public List<Medic> findMedicByRegulatoryMedicBody(RegulatoryMedicBody regulatoryMedicBody) {
 //        return medicCustomRepository.findByRegulatoryMedicBody(regulatoryMedicBody);
 //    }
+
+    public ResponseEntity<List<Speciality>> getAllSpecialitiesClient() {
+        try {
+            return mockResourceClient.getAllSpecialities();
+        }catch (FeignException.FeignClientException e) {
+            throw new CommunicationMicroServiceException(e.getMessage(), e.status());
+        }
+    }
 
     public List<Speciality> getAllSpecialities() {
         return new ArrayList<>(EnumSet.allOf(Speciality.class));

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("v1/mock/farmaceutico")
+@RequestMapping("v1/mock/farmaceuticos")
 @RequiredArgsConstructor
 @Slf4j
 public class PharmaceuticalResource {
@@ -37,6 +37,12 @@ public class PharmaceuticalResource {
     @GetMapping(params = "cpf")
     public ResponseEntity<Pharmaceutical> findPharmaceuticalByCpf(@RequestParam("cpf") String cpf) {
         Pharmaceutical pharmaceutical = service.findPharmaceuticalByCpf(cpf);
+        return ResponseEntity.ok(pharmaceutical);
+    }
+
+    @GetMapping(params = "id")
+    public ResponseEntity<Pharmaceutical> findPharmaceuticalById(@RequestParam("id") UUID id) {
+        Pharmaceutical pharmaceutical = service.findPharmaceuticalById(id);
         return ResponseEntity.ok(pharmaceutical);
     }
 

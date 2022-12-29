@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("v1/mock/farmacia")
+@RequestMapping("v1/mock/farmacias")
 @RequiredArgsConstructor
 @Slf4j
 public class PharmacyResource {

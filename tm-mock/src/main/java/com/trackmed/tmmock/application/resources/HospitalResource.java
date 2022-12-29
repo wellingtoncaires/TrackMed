@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("v1/mock/hospital")
+@RequestMapping("v1/mock/hospitais")
 @RequiredArgsConstructor
 @Slf4j
 public class HospitalResource {
@@ -29,7 +29,7 @@ public class HospitalResource {
 
     /** TODO: Método para testes na fase de desenvolvimento, remover */
     @GetMapping()
-    public ResponseEntity<List<Hospital>> findAll() {
+    public ResponseEntity<List<Hospital>> findAllHospitals() {
         log.info("findAll ");
         List<Hospital> hospitals = service.findAllHospital();
         return ResponseEntity.ok().body(hospitals);
@@ -52,9 +52,9 @@ public class HospitalResource {
         return ResponseEntity.created(headerLocation).build();
     }
 
-    @PutMapping(params = "id")
-    public ResponseEntity<Hospital> updateHospital(@RequestParam("id") UUID id, @RequestBody Hospital hospital) {
-        service.updateHospital(hospital, id);
+    @PutMapping()
+    public ResponseEntity<Hospital> updateHospital(@RequestBody Hospital hospital) {
+        service.updateHospital(hospital);
         URI headerLocation = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .query("id={id}")

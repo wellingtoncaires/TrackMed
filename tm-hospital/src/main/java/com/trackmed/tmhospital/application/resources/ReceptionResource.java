@@ -65,9 +65,8 @@ public class ReceptionResource {
     }
 
     @PostMapping
-    public ResponseEntity<Receptionist> saveReceptionist(@RequestBody Receptionist receptionist,
-                                                         @RequestParam("id-hospital") UUID idHospital) {
-        service.saveReceptionist(receptionist, idHospital);
+    public ResponseEntity<Receptionist> saveReceptionist(@RequestBody Receptionist receptionist) {
+        service.saveReceptionist(receptionist);
         URI headerLocation = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .query("id={id}")

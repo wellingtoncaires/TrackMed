@@ -38,8 +38,7 @@ public class Receptionist implements Serializable {
     @Column(name = "receptionist_id")
     private UUID id;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "hospital_id")
+    @Column(name = "id_hospital")
     private UUID hospital;
 
     @Column(nullable = false)
@@ -61,18 +60,6 @@ public class Receptionist implements Serializable {
     @Column(unique = true, nullable = false)
     private String username;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-
-    public Receptionist(UUID hospital, String name, String lastName, Date birthDate, String cpf,
-                        String email, String username, String password) {
-        this.hospital = hospital;
-        this.name = name;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.cpf = cpf;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
 }

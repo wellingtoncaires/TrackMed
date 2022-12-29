@@ -12,7 +12,7 @@ import java.time.Instant;
 @ControllerAdvice
 public class PharmacyExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(PharmacyException.class)
     public ResponseEntity<Object> standardError(PharmacyException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
@@ -21,6 +21,21 @@ public class PharmacyExceptionHandler extends ResponseEntityExceptionHandler {
         error.setStatus(status.value());
         error.setError(e.getMessage());
         error.setPath(request.getRequestURI());
+        error.setThrowable(e.getCause());
+
+        return new ResponseEntity<>(error, status);
+    }
+
+    @ExceptionHandler(CommunicationMicroServiceException.class)
+    public ResponseEntity<Object> standardError(CommunicationMicroServiceException e, HttpServletRequest request) {
+        HttpStatus status = HttpStatus.resolve(e.getStatus());
+
+        StandardError error = new StandardError();
+        error.setTimestamp(Instant.now());
+        error.setStatus(status.value());
+        error.setError(e.getMessage());
+        error.setPath(request.getRequestURI());
+        error.setThrowable(e.getCause());
 
         return new ResponseEntity<>(error, status);
     }

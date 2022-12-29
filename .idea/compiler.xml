@@ -10,7 +10,6 @@
         <module name="tm-gateway" />
         <module name="tm-hospital" />
         <module name="tm-discovery-server" />
-        <module name="tm-base" />
         <module name="tm-mock" />
         <module name="tm-pharmacy" />
       </profile>

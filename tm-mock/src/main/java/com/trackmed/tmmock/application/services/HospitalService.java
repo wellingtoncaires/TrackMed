@@ -57,20 +57,17 @@ public class HospitalService {
         }
     }
 
-    private void validateOnUpdateHospital(Hospital hospital, UUID id) {
+    private void validateOnUpdateHospital(Hospital hospital) {
         if(hospital == null) {
             throw new MockException("Não existe hospital informado!");
         }
-        if(!existsHospital(id)) {
+        if(!existsHospital(hospital.getId())) {
             throw new MockException("Não existe hospital cadastrado!");
-        }
-        if(!hospital.getId().equals(id)) {
-            throw new MockException("Código do hospital diferente do código passado!");
         }
     }
 
-    public Hospital updateHospital(Hospital hospital, UUID id) {
-        validateOnUpdateHospital(hospital, id);
+    public Hospital updateHospital(Hospital hospital) {
+        validateOnUpdateHospital(hospital);
         return hospitalRepository.save(hospital);
     }
 
