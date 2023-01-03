@@ -1,22 +1,20 @@
 package com.trackmed.tmhospital.application.services;
 
-import com.trackmed.tmhospital.domains.models.HospitalModel;
+import com.trackmed.tmhospital.domains.entities.Hospital;
 import com.trackmed.tmhospital.domains.entities.Medic;
+import com.trackmed.tmhospital.domains.entities.RegulatoryMedicBody;
 import com.trackmed.tmhospital.domains.enums.Speciality;
-import com.trackmed.tmhospital.exceptions.CommunicationMicroServiceException;
 import com.trackmed.tmhospital.exceptions.HospitalException;
-import com.trackmed.tmhospital.infra.clients.MockResourceClient;
 import com.trackmed.tmhospital.infra.repositories.MedicCustomRepository;
 import com.trackmed.tmhospital.infra.repositories.MedicRepository;
-import feign.FeignException;
+import com.trackmed.tmhospital.infra.repositories.RegulatoryMedicBodyRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Optional;
@@ -24,37 +22,18 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MedicService {
 
     private final MedicRepository medicRepository;
     private final MedicCustomRepository medicCustomRepository;
-    private final MockResourceClient mockResourceClient;
+    private final HospitalService hospitalService;
+    private final RegulatoryMedicBodyRepository regulatoryMedicBodyRepository;
 
     /** start class Medic */
     /** TODO: Método para testes na fase de desenvolvimento, remover */
     public List<Medic> findAllMedics() {
         return medicRepository.findAll();
-    }
-
-    public ResponseEntity<Medic> findMedicClientByCpf(@RequestParam("cpf") String cpf) {
-        try {
-            return mockResourceClient.findMedicByCpf(cpf);
-        }catch (FeignException.FeignClientException e) {
-            int httpStatus = e.status();
-            if(e.status() == HttpStatus.NOT_FOUND.value()) {
-                throw new HospitalException("Médico não encontrado!");
-            }
-            throw new CommunicationMicroServiceException(e.getMessage(), httpStatus);
-        }
-    }
-
-    public ResponseEntity<List<Medic>> findAllMedicsClients() {
-        try {
-            return mockResourceClient.findAllMedics();
-        }catch (FeignException.FeignClientException e) {
-            int httpStatus = e.status();
-            throw new CommunicationMicroServiceException(e.getMessage(), httpStatus);
-        }
     }
 
     public Medic findMedicById(UUID id) {
@@ -90,48 +69,29 @@ public class MedicService {
     }
 
     public List<Medic> findMedicByHospitalId(UUID hospitalId) {
-        HospitalModel hospitalModel = findHospitalById(hospitalId);
-        return medicRepository.findByHospital(hospitalModel);
+        Hospital hospital = hospitalService.findHospitalById(hospitalId);
+        return medicRepository.findByHospital(hospital);
     }
 
-    public HospitalModel findHospitalById(UUID id) {
-        try {
-            return  mockResourceClient.findHospital(id).getBody();
-        }catch (FeignException.FeignClientException e) {
-            int httpStatus = e.status();
-            if(e.status() == HttpStatus.NOT_FOUND.value()) {
-                throw new HospitalException("Hospital não encontrado!");
-            }
-            throw new CommunicationMicroServiceException(e.getMessage(), httpStatus);
-        }
-    }
 
 //    public List<Medic> findMedicByRegulatoryMedicBody(RegulatoryMedicBody regulatoryMedicBody) {
 //        return medicCustomRepository.findByRegulatoryMedicBody(regulatoryMedicBody);
 //    }
 
-    public ResponseEntity<List<Speciality>> getAllSpecialitiesClient() {
-        try {
-            return mockResourceClient.getAllSpecialities();
-        }catch (FeignException.FeignClientException e) {
-            throw new CommunicationMicroServiceException(e.getMessage(), e.status());
-        }
-    }
-
     public List<Speciality> getAllSpecialities() {
         return new ArrayList<>(EnumSet.allOf(Speciality.class));
     }
 
-    public List<Medic> findMedicsBySpeciality(String specialityString) {
-        List<Speciality> specialities = getAllSpecialities();
-        specialities
-                .stream()
-                .filter(splt -> splt.getDescription().equals(specialityString))
-                .findFirst()
-                .orElseThrow((() -> new HospitalException("Especialidade não encontra!")));
-        Speciality speciality = Speciality.valueOf(specialityString);
-        return medicCustomRepository.findBySpeciality(speciality);
-    }
+//    public List<Medic> findMedicsBySpeciality(String specialityString) {
+//        List<Speciality> specialities = getAllSpecialities();
+//        specialities
+//                .stream()
+//                .filter(splt -> splt.getDescription().equals(specialityString))
+//                .findFirst()
+//                .orElseThrow((() -> new HospitalException("Especialidade não encontra!")));
+//        Speciality speciality = Speciality.valueOf(specialityString);
+//        return medicCustomRepository.findBySpeciality(speciality);
+//    }
 
     public boolean existsMedic(UUID id) {
         return medicRepository.findById(id).isPresent();
@@ -152,21 +112,21 @@ public class MedicService {
 //        }
     }
 
-    private void validateOnUpdateMedic(Medic medic, UUID id) {
+    private void validateOnUpdateMedic(Medic medic) {
         if(medic == null) {
             throw new HospitalException("Nenhum médico informado!");
         }
-        if(!existsMedic(id)) {
+        if(!existsMedic(medic.getId())) {
             throw new HospitalException("Não existe médico cadastrado!");
         }
-        if(!medic.getId().equals(id)) {
-            throw new HospitalException("Código do médico diferente do código passado!");
+        if(medic.getHospital() == null) {
+            throw new HospitalException("Médico precisa ter um hospital cadastrado!");
         }
     }
 
-    public Medic updateMedic(Medic medic, UUID id) {
+    public Medic updateMedic(Medic medic) {
         medic.setPassword(new BCryptPasswordEncoder().encode(medic.getPassword()));
-        validateOnUpdateMedic(medic, id);
+        validateOnUpdateMedic(medic);
         return medicRepository.save(medic);
     }
 
@@ -181,12 +141,13 @@ public class MedicService {
     public void addHospitalToMedic(UUID medicId, UUID hospitalId) {
         if(hospitalId == null) {
             throw new HospitalException("Nenhum hospital informado!");
-        }if(medicId == null) {
+        }
+        if(medicId == null) {
             throw new HospitalException("Nenhum médico informado!");
         }
-        HospitalModel hospitalModel = findHospitalById(hospitalId);
+        Hospital hospital = hospitalService.findHospitalById(hospitalId);
         Medic medic = findMedicById(medicId);
-        medic.setHospital(hospitalModel.getId());
+        medic.setHospital(hospital);
         medicRepository.save(medic);
     }
 
@@ -201,20 +162,67 @@ public class MedicService {
         }
     }
 
-//    public void addSpecialityToMedic(Medic medic, Speciality speciality) {
-//        validateSpecialityUpdateToMedic(medic, speciality);
-//        medic.getSpecialities().add(speciality);
-//        medicRepository.save(medic);
-//    }
-//
-//    public void removeSpecialityToMedic(Medic medic, Speciality speciality) {
-//        validateSpecialityUpdateToMedic(medic, speciality);
-//        List<Speciality> specialities = medic.getSpecialities();
-//        if(specialities.contains(speciality)) {
-//            throw new HospitalException("O Médico " + medic.getName() + " não é " + speciality.getDescription());
-//        }
-//        specialities.remove(speciality);
-//        medic.setSpecialities(specialities);
-//        medicRepository.save(medic);
-//    }
+    public void validateRegisterUpdateToMedic(Medic medic, RegulatoryMedicBody regulatoryMedicBody) {
+        if(regulatoryMedicBody == null) {
+            throw new HospitalException("Nenhum registro informado!");
+        }if(medic == null) {
+            throw new HospitalException("Nenhum médico informado!");
+        }
+        if(regulatoryMedicBody.getSpeciality() == null) {
+            throw new HospitalException("Nenhuma especialidade informada!");
+        }
+        if(!existsMedic(medic.getId())) {
+            throw new HospitalException("Não existe médico com o código " + medic.getId() + " cadsatrado!");
+        }
+        List<Speciality> specialities = new ArrayList<>(EnumSet.allOf(Speciality.class));
+        if(!specialities.contains(regulatoryMedicBody.getSpeciality())) {
+            throw new HospitalException("Especialidade inválida.<br>Verifique!");
+        }
+    }
+
+    @Transactional
+    public void addRegisterToMedic(UUID idMedic, RegulatoryMedicBody regulatoryMedicBody) {
+        Medic medic = findMedicById(idMedic);
+        validateRegisterUpdateToMedic(medic, regulatoryMedicBody);
+        regulatoryMedicBody.setRegistrationDate(new Date());
+        regulatoryMedicBody.setMedicName(medic.getName());
+        regulatoryMedicBody.setMedicLastName(medic.getLastName());
+        regulatoryMedicBody.setEnabled(true);
+        regulatoryMedicBody = regulatoryMedicBodyRepository.save(regulatoryMedicBody);
+        medic.getListRegulatoryMedicBody().add(regulatoryMedicBody);
+        medicRepository.save(medic);
+    }
+
+    @Transactional
+    public void removeRegisterToMedic(UUID idMedic, UUID idRegulatory) {
+        Medic medic = findMedicById(idMedic);
+        RegulatoryMedicBody regulatoryMedicBody = findRegulatoryMedicBodyById(idRegulatory);
+        validateRegisterUpdateToMedic(medic, regulatoryMedicBody);
+        List<RegulatoryMedicBody> registers = medic.getListRegulatoryMedicBody();
+        if(!registers.contains(regulatoryMedicBody)) {
+            throw new HospitalException("Registro não localizado para o médico " + medic.getName());
+        }
+        registers.remove(regulatoryMedicBody);
+        medic.setListRegulatoryMedicBody(registers);
+        medicRepository.save(medic);
+    }
+
+    public RegulatoryMedicBody findRegulatoryMedicBodyById(UUID idRegulatory) {
+        Optional<RegulatoryMedicBody> register = regulatoryMedicBodyRepository.findById(idRegulatory);
+        if(register.isEmpty()) {
+            throw new HospitalException("Registro não loacalizado!");
+        }
+        return register.get();
+    }
+
+    public List<Medic> findMedicsBySpeciality(String specialityString) {
+        List<Speciality> specialities = getAllSpecialities();
+        specialities
+                .stream()
+                .filter(splt -> splt.getDescription().equals(specialityString))
+                .findFirst()
+                .orElseThrow((() -> new HospitalException("Especialidade não encontra!")));
+        Speciality speciality = Speciality.valueOf(specialityString);
+        return medicCustomRepository.findBySpeciality(speciality);
+    }
 }

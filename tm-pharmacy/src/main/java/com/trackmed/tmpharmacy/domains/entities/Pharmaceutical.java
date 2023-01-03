@@ -1,6 +1,7 @@
 package com.trackmed.tmpharmacy.domains.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,7 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -37,7 +38,7 @@ public class Pharmaceutical implements Serializable {
     private UUID id;
 
     @Column(name = "pharmacy_id", nullable = false)
-    private UUID pharmacy;
+    private Pharmacy pharmacy;
 
     @Column(nullable = false)
     private String name;
@@ -61,9 +62,8 @@ public class Pharmaceutical implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "register", nullable = false)
-    private RegulatoryPharmaceuticalyBody regulatoryBody;
-
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "register")
+    private RegulatoryPharmaceuticalBody regulatoryBody;
 
 }

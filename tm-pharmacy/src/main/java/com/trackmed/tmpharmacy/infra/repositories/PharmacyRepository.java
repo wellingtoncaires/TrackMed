@@ -1,6 +1,6 @@
-package com.trackmed.tmmock.infra.repositories;
+package com.trackmed.tmpharmacy.infra.repositories;
 
-import com.trackmed.tmmock.domains.entities.Pharmacy;
+import com.trackmed.tmpharmacy.domains.entities.Pharmacy;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

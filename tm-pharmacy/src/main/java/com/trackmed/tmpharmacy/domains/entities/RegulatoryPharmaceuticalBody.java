@@ -19,26 +19,27 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "PHA_T_REGULATORY_P_BODY")
+@Table(name = "PHA_T_REGULATORY_PH_BODY")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class RegulatoryPharmaceuticalyBody implements Serializable {
+public class RegulatoryPharmaceuticalBody implements Serializable {
     public static final long serialVersionUID=1L;
 
     @Id
-
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "regulatory_p_body_id")
+    @Column(name = "regulatory_ph_body_id")
     private UUID id;
 
-    @Column(nullable = false)
     private String pharmaceuticalName;
 
+    private String pharmaceuticalLastName;
+
+    private String pharmaceuticalCpf;
+
     @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
     private Date registrationDate;
 
     @Temporal(TemporalType.DATE)

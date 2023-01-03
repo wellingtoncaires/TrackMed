@@ -1,10 +1,9 @@
-package com.trackmed.tmmock.application.services;
+package com.trackmed.tmpharmacy.application.services;
 
-import com.trackmed.tmmock.domains.entities.Pharmacy;
-import com.trackmed.tmmock.exceptions.MockException;
-import com.trackmed.tmmock.infra.repositories.PharmacyRepository;
+import com.trackmed.tmpharmacy.domains.entities.Pharmacy;
+import com.trackmed.tmpharmacy.exceptions.PharmacyException;
+import com.trackmed.tmpharmacy.infra.repositories.PharmacyRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class PharmacyService {
 
     private final PharmacyRepository repository;
@@ -25,7 +23,7 @@ public class PharmacyService {
     public Pharmacy findPharmacyById(UUID id) {
         Optional<Pharmacy> pharmacy = repository.findById(id);
         if(pharmacy.isEmpty()) {
-            throw new MockException("Nenhuma farmácia com o código " + id + " cadastrada!");
+            throw new PharmacyException("Nenhuma farmácia com o código " + id + " cadastrada!");
         }
         return pharmacy.get();
     }

@@ -1,4 +1,4 @@
-package com.trackmed.tmhospital.domains.models;
+package com.trackmed.tmhospital.domains.enums;
 
 import lombok.Getter;
 import lombok.ToString;

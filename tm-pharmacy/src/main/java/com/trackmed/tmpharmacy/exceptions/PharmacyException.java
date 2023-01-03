@@ -15,6 +15,10 @@ public class PharmacyException extends RuntimeException implements Serializable 
         super(message);
     }
 
+    public PharmacyException(Throwable cause) {
+        super(cause);
+    }
+
     public PharmacyException(String message, Throwable cause) {
         super(message, cause);
     }

@@ -1,42 +1,75 @@
 package com.trackmed.tmhospital.application.services;
 
-import com.trackmed.tmhospital.domains.models.HospitalModel;
-import com.trackmed.tmhospital.exceptions.CommunicationMicroServiceException;
+import com.trackmed.tmhospital.domains.entities.Hospital;
 import com.trackmed.tmhospital.exceptions.HospitalException;
-import com.trackmed.tmhospital.infra.clients.MockResourceClient;
-import feign.FeignException;
+import com.trackmed.tmhospital.infra.repositories.HospitalRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class HospitalService {
 
-    private final MockResourceClient mockResourceClient;
+    private final HospitalRepository repository;
 
-    public ResponseEntity<List<HospitalModel>> findAllHospital() {
-        try {
-            return mockResourceClient.findAll();
-        }catch (FeignException.FeignClientException e) {
-            throw new CommunicationMicroServiceException(e.getMessage(), e.status());
+    /** TODO: Método para testes na fase de desenvolvimento, remover */
+    public List<Hospital> findAllHospital() {
+        return repository.findAll();
+    }
+
+    public Hospital findHospitalById(UUID id) {
+        Optional<Hospital> hospital = repository.findById(id);
+        if(hospital.isEmpty()) {
+            throw new HospitalException("Não existe hospital com o código " + id + " cadastrado!");
+        }
+        if(!hospital.get().isOperationalLicense()) {
+            throw new HospitalException("O hospital  " + hospital.get().getName() + " está com sua licença inativa!");
+        }
+        return hospital.get();
+    }
+
+    public boolean existsHospital(UUID id) {
+        return repository.findById(id).isPresent();
+    }
+
+    public Hospital saveHospital(Hospital hospital) {
+        validateOnSaveHospital(hospital);
+        return repository.save(hospital);
+    }
+
+    private void validateOnSaveHospital(Hospital hospital) {
+        if(hospital == null) {
+            throw new HospitalException("Não existe hospital informado!");
+        }
+        if(hospital.getId() != null && existsHospital(hospital.getId())) {
+            throw new HospitalException("Jã existe um hospital com o código " + hospital.getId() + " cadastrado!");
         }
     }
 
-    public ResponseEntity<HospitalModel> findHospitalById(@RequestParam UUID id) {
-        try {
-            return mockResourceClient.findHospital(id);
-        }catch (FeignException.FeignClientException e) {
-            int httpStatus = e.status();
-            if(e.status() == HttpStatus.NOT_FOUND.value()) {
-                throw new HospitalException("Hospital não encontrado!");
-            }
-            throw new CommunicationMicroServiceException(e.getMessage(), httpStatus);
+    private void validateOnUpdateHospital(Hospital hospital) {
+        if(hospital == null) {
+            throw new HospitalException("Não existe hospital informado!");
         }
+        if(!existsHospital(hospital.getId())) {
+            throw new HospitalException("Não existe hospital cadastrado!");
+        }
+    }
+
+    public Hospital updateHospital(Hospital hospital) {
+        validateOnUpdateHospital(hospital);
+        return repository.save(hospital);
+    }
+
+    public void deleteHospital(UUID id) {
+        Optional<Hospital> hospital = repository.findById(id);
+        if(hospital.isEmpty()) {
+            throw new HospitalException("Não existe hospital com o código " + id + "!");
+        }
+        hospital.get().setOperationalLicense(false);
+        repository.save(hospital.get());
     }
 }

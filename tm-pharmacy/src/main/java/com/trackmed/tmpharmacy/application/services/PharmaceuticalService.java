@@ -1,144 +1,121 @@
 package com.trackmed.tmpharmacy.application.services;
 
+
+import com.trackmed.tmpharmacy.domains.entities.Pharmaceutical;
+import com.trackmed.tmpharmacy.domains.entities.RegulatoryPharmaceuticalBody;
+import com.trackmed.tmpharmacy.exceptions.PharmacyException;
+import com.trackmed.tmpharmacy.infra.repositories.PharmaceuticalRepository;
+import com.trackmed.tmpharmacy.infra.repositories.RegulatoryPharmaceuticalBodyRepository;
+import com.trackmed.tmpharmacy.security.SecurityBeans;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class PharmaceuticalService {
-//
-//    private final MedicRepository medicRepository;
-//    private final MedicCustomRepository medicCustomRepository;
-//    private final RegulatoryMedicBodyRepository regulatoryMedicBodyRepository;
-//
-//    public List<Medic> findAllMedics() {
-//        return medicRepository.findAll();
-//    }
-//
-//    public Medic findMedicById(UUID id) {
-//        Optional<Medic> medic = medicRepository.findById(id);
-//        if(medic.isEmpty()) {
-//            throw new MockException("Não existe médico com o código " + id + " cadastrado!");
-//        }
-//        return medic.get();
-//    }
-//
-//    public Medic findMedicByCpf(String cpf) {
-//        Optional<Medic> medic = medicRepository.findByCpf(cpf);
-//        if(medic.isEmpty()) {
-//            throw new MockException("Não existe médico com o CPF " + cpf + " cadastrado!");
-//        }
-//        return medic.get();
-//    }
-//
-//    public List<Speciality> getAllSpecialities() {
-//        return new ArrayList<>(EnumSet.allOf(Speciality.class));
-//    }
-//
-//    public boolean existsMedic(UUID id) {
-//        return medicRepository.findById(id).isPresent();
-//    }
-//
-//    public boolean existsMedic(String cpf) {
-//        return medicRepository.findByCpf(cpf).isPresent();
-//    }
-//
-//    public Medic saveMedic(Medic medic) {
-//        validateOnSaveMedic(medic);
-//        return medicRepository.save(medic);
-//    }
-//
-//    private void validateOnSaveMedic(Medic medic) {
-//        if(medic == null) {
-//            throw new MockException("Nenhum médico informado!");
-//        }
-//        if(medic.getCpf() == null || medic.getCpf().trim().equals("")) {
-//            /** TODO: Criar regra de validação de CPF quando for migrar para Banco de dados */
-//            throw new MockException("Cpf inválido!");
-//        }
-//        if(existsMedic(medic.getCpf())) {
-//            throw new MockException("Médico já cadastrado!");
-//        }
-//    }
-//
-//    private void validateOnUpdateMedic(Medic medic) {
-//        if(medic == null) {
-//            throw new MockException("Nenhum médico informado!");
-//        }
-//        if(!existsMedic(medic.getId())) {
-//            throw new MockException("Não existe médico cadastrado!");
-//        }
-//    }
-//
-//    public Medic updateMedic(Medic medic) {
-//        validateOnUpdateMedic(medic);
-//        return medicRepository.save(medic);
-//    }
-//
-//    public void validateRegisterUpdateToMedic(Medic medic, RegulatoryMedicBody regulatoryMedicBody) {
-//        if(regulatoryMedicBody == null) {
-//            throw new MockException("Nenhum registro informado!");
-//        }if(medic == null) {
-//            throw new MockException("Nenhum médico informado!");
-//        }
-//        if(regulatoryMedicBody.getSpeciality() == null) {
-//            throw new MockException("Nenhuma especialidade informada!");
-//        }
-//        if(!existsMedic(medic.getId())) {
-//            throw new MockException("Não existe médico com o código " + medic.getId() + " cadsatrado!");
-//        }
-//        List<Speciality> specialities = new ArrayList<>(EnumSet.allOf(Speciality.class));
-//        if(!specialities.contains(regulatoryMedicBody.getSpeciality())) {
-//            throw new MockException("Especialidade inválida.<br>Verifique!");
-//        }
-//    }
-//
-//    @Transactional
-//    public void addRegisterToMedic(UUID idMedic, RegulatoryMedicBody regulatoryMedicBody) {
-//        Medic medic = findMedicById(idMedic);
-//        validateRegisterUpdateToMedic(medic, regulatoryMedicBody);
-//        regulatoryMedicBody.setRegistrationDate(new Date());
-//        regulatoryMedicBody.setMedicName(medic.getName());
-//        regulatoryMedicBody.setMedicLastName(medic.getLastName());
-//        regulatoryMedicBody.setEnabled(true);
-//        regulatoryMedicBody = regulatoryMedicBodyRepository.save(regulatoryMedicBody);
-//        medic.getListRegulatoryMedicBody().add(regulatoryMedicBody);
-//        medicRepository.save(medic);
-//    }
-//
-//    @Transactional
-//    public void removeRegisterToMedic(UUID idMedic, UUID idRegulatory) {
-//        Medic medic = findMedicById(idMedic);
-//        RegulatoryMedicBody regulatoryMedicBody = findRegulatoryMedicBodyById(idRegulatory);
-//        validateRegisterUpdateToMedic(medic, regulatoryMedicBody);
-//        List<RegulatoryMedicBody> registers = medic.getListRegulatoryMedicBody();
-//        if(!registers.contains(regulatoryMedicBody)) {
-//            throw new MockException("Registro não localizado para o médico " + medic.getName());
-//        }
-//        registers.remove(regulatoryMedicBody);
-//        medic.setListRegulatoryMedicBody(registers);
-//        medicRepository.save(medic);
-//    }
-//
-//    public RegulatoryMedicBody findRegulatoryMedicBodyById(UUID idRegulatory) {
-//        Optional<RegulatoryMedicBody> register = regulatoryMedicBodyRepository.findById(idRegulatory);
-//        if(register.isEmpty()) {
-//            throw new MockException("Registro não loacalizado!");
-//        }
-//        return register.get();
-//    }
-//
-//    public List<Medic> findMedicsBySpeciality(String specialityString) {
-//        List<Speciality> specialities = getAllSpecialities();
-//        specialities
-//                .stream()
-//                .filter(splt -> splt.getDescription().equals(specialityString))
-//                .findFirst()
-//                .orElseThrow((() -> new MockException("Especialidade não encontra!")));
-//        log.info("findMedicsBySpeciality");
-//        Speciality speciality = Speciality.valueOf(specialityString);
-//        return medicCustomRepository.findBySpeciality(speciality);
-//    }
+
+    private final PharmaceuticalRepository repository;
+    private final RegulatoryPharmaceuticalBodyRepository regulatoryPharmaceuticalBodyRepository;
+
+    public List<Pharmaceutical> findAllPharmaceuticals() {
+        return repository.findAll();
+    }
+
+    public Pharmaceutical findPharmaceuticalById(UUID id) {
+        Optional<Pharmaceutical> pharmaceutical = repository.findById(id);
+        if (pharmaceutical.isEmpty()) {
+            throw new PharmacyException("Não existe farmacêutico com o código " + id + " cadasrado!");
+        }
+        return pharmaceutical.get();
+    }
+
+    public Pharmaceutical findPharmaceuticalByCpf(String cpf) {
+        Optional<Pharmaceutical> pharmaceutical = repository.findByCpf(cpf);
+        if (pharmaceutical.isEmpty()) {
+            throw new PharmacyException("Não existe farmacêutico com o cpf " + cpf + " cadasrado!");
+        }
+        return pharmaceutical.get();
+    }
+
+    public boolean existsPharmaceutical(UUID id) {
+        return repository.findById(id).isPresent();
+    }
+
+    public boolean existsPharmaceutical(String cpf) {
+        return repository.findByCpf(cpf).isPresent();
+    }
+
+    public Pharmaceutical savePharmaceutical(Pharmaceutical pharmaceutical) {
+        validateOnSavePharmaceutical(pharmaceutical);
+        pharmaceutical.setPassword(new SecurityBeans().passwordEncoder().encode(pharmaceutical.getPassword()));
+        return repository.save(pharmaceutical);
+    }
+
+    public void validateOnSavePharmaceutical(Pharmaceutical pharmaceutical) {
+        if (pharmaceutical == null) {
+            throw new PharmacyException("Nenhum faracêutico informado!");
+        }
+        if (pharmaceutical.getCpf() == null || pharmaceutical.getCpf().trim().equals("")) {
+            /** TODO: Criar regra de validação de CPF quando for migrar para Banco de dados */
+            throw new PharmacyException("Cpf inválido!");
+        }
+        if (existsPharmaceutical(pharmaceutical.getCpf())) {
+            throw new PharmacyException("Faracêutico já cadastrado!");
+        }
+    }
+
+    public Pharmaceutical updatePharmaceutical(Pharmaceutical pharmaceutical) {
+        validateOnUpdatePharmaceutical(pharmaceutical);
+        return repository.save(pharmaceutical);
+    }
+
+    public void validateOnUpdatePharmaceutical(Pharmaceutical pharmaceutical) {
+        if(pharmaceutical == null) {
+            throw new PharmacyException("Nenhum médico informado!");
+        }
+        if(!existsPharmaceutical(pharmaceutical.getId())) {
+            throw new PharmacyException("Não existe médico cadastrado!");
+        }
+    }
+
+    @Transactional
+    public void addRegisterToPharmaceutical(UUID idPharmaceutical, RegulatoryPharmaceuticalBody regulatoryPharmaceuticalBody) {
+        Pharmaceutical pharmaceutical = findPharmaceuticalById(idPharmaceutical);
+        validateRegisterToPharmaceutical(pharmaceutical, regulatoryPharmaceuticalBody);
+        regulatoryPharmaceuticalBody.setRegistrationDate(new Date());
+        regulatoryPharmaceuticalBody.setPharmaceuticalName(pharmaceutical.getName());
+        regulatoryPharmaceuticalBody.setPharmaceuticalLastName(pharmaceutical.getLastName());
+        regulatoryPharmaceuticalBody.setPharmaceuticalCpf(pharmaceutical.getCpf());
+        regulatoryPharmaceuticalBody.setEnabled(true);
+        regulatoryPharmaceuticalBodyRepository.save(regulatoryPharmaceuticalBody);
+        pharmaceutical.setRegulatoryBody(regulatoryPharmaceuticalBody);
+        repository.save(pharmaceutical);
+    }
+
+    public void validateRegisterToPharmaceutical(Pharmaceutical pharmaceutical, RegulatoryPharmaceuticalBody regulatoryPharmaceuticalBody) {
+        if(regulatoryPharmaceuticalBody == null) {
+            throw new PharmacyException("Nenhum registro informado!");
+        }if(pharmaceutical == null) {
+            throw new PharmacyException("Nenhum famacêutico informado!");
+        }
+        if(!existsPharmaceutical(pharmaceutical.getId())) {
+            throw new PharmacyException("Não existe famacêutico com o código " + pharmaceutical.getId() + " cadsatrado!");
+        }
+    }
+
+    public void removeRegisterToPharmaceutical(UUID idPharmaceutical) {
+        Pharmaceutical pharmaceutical = findPharmaceuticalById(idPharmaceutical);
+        RegulatoryPharmaceuticalBody register = pharmaceutical.getRegulatoryBody();
+        if(register == null) {
+            throw new PharmacyException("Farmacêutico não possui nenhum registro");
+        }
+        register.setEnabled(false);
+        regulatoryPharmaceuticalBodyRepository.save(register);
+    }
 }

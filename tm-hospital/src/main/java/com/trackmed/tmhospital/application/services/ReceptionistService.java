@@ -1,9 +1,8 @@
 package com.trackmed.tmhospital.application.services;
 
-import com.trackmed.tmhospital.domains.models.HospitalModel;
+import com.trackmed.tmhospital.domains.entities.Hospital;
 import com.trackmed.tmhospital.domains.entities.Receptionist;
 import com.trackmed.tmhospital.exceptions.HospitalException;
-import com.trackmed.tmhospital.infra.clients.MockResourceClient;
 import com.trackmed.tmhospital.infra.repositories.ReceptionistRepository;
 import com.trackmed.tmhospital.security.SecurityBeans;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ import java.util.UUID;
 public class ReceptionistService {
 
     private final ReceptionistRepository receptionistRepository;
-    private final MockResourceClient mockResourceClient;
+    private final HospitalService hospitalService;
 
     public List<Receptionist> findAll() {
         return receptionistRepository.findAll();
@@ -58,13 +57,13 @@ public class ReceptionistService {
         return receptionist.get();
     }
 
-    public HospitalModel findHospitalById(UUID id) {
-        var hospital = mockResourceClient.findHospital(id).getBody();
+    public Hospital findHospitalById(UUID id) {
+        var hospital = hospitalService.findHospitalById(id);
         return hospital;
     }
 
     public List<Receptionist> findReceptionistByHospital(UUID idHospital) {
-        HospitalModel hospital = findHospitalById(idHospital);
+        Hospital hospital = findHospitalById(idHospital);
         List<Receptionist> receptionist = receptionistRepository.findByHospital(hospital);
         return receptionist;
     }
@@ -81,7 +80,7 @@ public class ReceptionistService {
 
     public void validateOnSaveReceptionist(Receptionist receptionist) {
 
-        if(mockResourceClient.findHospital(receptionist.getHospital()).getBody() == null) {
+        if(hospitalService.findHospitalById(receptionist.getHospital()) == null) {
             throw new HospitalException("Hospital inválido!");
         }
         if(existsReceptionistByCpf(receptionist.getCpf())) {

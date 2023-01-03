@@ -4,9 +4,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.trackmed.tmhospital.domains.enums.Speciality;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -35,7 +37,7 @@ public class Medic implements Serializable {
     private UUID id;
 
     @Column(name = "hospital_id", nullable = false)
-    private UUID hospital;
+    private Hospital hospital;
 
     @Column(nullable = false)
     private String name;
@@ -59,23 +61,6 @@ public class Medic implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-//    @ManyToMany(fetch = FetchType.EAGER)
-//    private List<UUID> listRegulatoryMedicBody;
-//
-//    private List<Speciality> specialities;
-
-    public Medic(UUID hospital, String name, String lastName, Date birthDate, String cpf, String email,
-                 String username, String password, List<UUID> listRegulatoryMedicBody,
-                 List<Speciality> specialities) {
-        this.hospital = hospital;
-        this.name = name;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.cpf = cpf;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-//        this.listRegulatoryMedicBody = listRegulatoryMedicBody == null ? new ArrayList<>() : listRegulatoryMedicBody;
-//        this.specialities = specialities == null ? new ArrayList<>() : specialities;
-    }
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<RegulatoryMedicBody> listRegulatoryMedicBody;
 }

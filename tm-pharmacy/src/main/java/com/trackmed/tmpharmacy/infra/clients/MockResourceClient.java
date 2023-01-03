@@ -1,9 +1,6 @@
 package com.trackmed.tmpharmacy.infra.clients;
 
-import com.trackmed.tmpharmacy.domains.entities.enums.MedicineType;
 import com.trackmed.tmpharmacy.domains.models.MedicineModel;
-import com.trackmed.tmpharmacy.domains.models.Pharmaceutical;
-import com.trackmed.tmpharmacy.domains.models.PharmacyModel;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,21 +10,6 @@ import java.util.UUID;
 
 @FeignClient(value = "tm-mock", path = "/v1/mock")
 public interface MockResourceClient {
-
-    @GetMapping(path = "/farmacias")
-    ResponseEntity<List<PharmacyModel>> findAllPharmacies();
-
-    @GetMapping(path = "/farmacias", params = "id")
-    ResponseEntity<PharmacyModel> findPharmacyById(@RequestParam("id") UUID id);
-
-    @GetMapping(path = "/farmaceuticos")
-    public ResponseEntity<List<Pharmaceutical>> findAll();
-
-    @GetMapping(path = "/farmaceuticos", params = "cpf")
-    ResponseEntity<Pharmaceutical> findPharmaceuticalByCpf(@RequestParam("cpf") String cpf);
-
-    @GetMapping(path = "/farmaceuticos", params = "id")
-    ResponseEntity<Pharmaceutical> findPharmaceuticalById(@RequestParam("id") UUID id);
 
     @GetMapping(path = "medicamentos")
     ResponseEntity<List<MedicineModel>> getAllMedicines();

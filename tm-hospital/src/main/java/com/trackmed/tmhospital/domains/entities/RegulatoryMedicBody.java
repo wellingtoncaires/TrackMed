@@ -1,6 +1,6 @@
-package com.trackmed.tmmock.domains.entities;
+package com.trackmed.tmhospital.domains.entities;
 
-import com.trackmed.tmmock.domains.enums.Speciality;
+import com.trackmed.tmhospital.domains.enums.Speciality;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,23 +22,23 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-@Table(name = "MOCK_T_REGULATORY_PH_BODY")
+@Table(name = "HOS_T_REGULATORY_MEDIC_BODY")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class RegulatoryPharmaceuticalBody implements Serializable {
+public class RegulatoryMedicBody implements Serializable {
     public static final long serialVersionUID=1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "regulatory_ph_body_id")
+    @Column(name = "regulatory_md_body_id")
     private UUID id;
 
-    private String pharmaceuticalName;
+    private String medicName;
 
-    private String pharmaceuticalLastName;
+    private String medicLastName;
 
     @Temporal(TemporalType.DATE)
     private Date registrationDate;
@@ -47,4 +47,12 @@ public class RegulatoryPharmaceuticalBody implements Serializable {
     private Date expirationDate;
 
     private boolean enabled;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Speciality speciality;
+
+    public RegulatoryMedicBody( Speciality speciality) {
+        this.speciality = speciality;
+    }
 }

@@ -1,6 +1,5 @@
 package com.trackmed.tmpharmacy.application.resources;
 
-import com.trackmed.tmpharmacy.domains.entities.enums.MedicineType;
 import com.trackmed.tmpharmacy.domains.models.MedicineModel;
 import com.trackmed.tmpharmacy.infra.clients.MockResourceClient;
 import lombok.RequiredArgsConstructor;
