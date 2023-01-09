@@ -10,4 +10,5 @@ import java.util.UUID;
 @Repository
 public interface CitizenRepository extends JpaRepository<Citizen, UUID> {
     Optional<Citizen> findByUsername(String username);
+    Optional<Citizen> findByCpf(String cpf);
 }

@@ -56,7 +56,7 @@ public class PharmaceuticalResource {
     }
 
     @PutMapping
-    public ResponseEntity<Pharmaceutical> updateMedic(@RequestBody Pharmaceutical pharmaceutical) {
+    public ResponseEntity<Pharmaceutical> updatePharmaceutical(@RequestBody Pharmaceutical pharmaceutical) {
         service.updatePharmaceutical(pharmaceutical);
         URI headerLocation = ServletUriComponentsBuilder
                 .fromCurrentRequest()
