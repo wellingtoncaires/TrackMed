@@ -7,15 +7,15 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class UserException extends RuntimeException implements Serializable {
+public class BaseException extends RuntimeException implements Serializable {
     private static final long serialVErsionUID = 1L;
 
 
-    public UserException(String message) {
+    public BaseException(String message) {
         super(message);
     }
 
-    public UserException(String message, Throwable cause) {
+    public BaseException(String message, Throwable cause) {
         super(message, cause);
     }
 }

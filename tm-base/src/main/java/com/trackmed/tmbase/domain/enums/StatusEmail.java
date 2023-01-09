@@ -1,2 +1,7 @@
-package com.trackmed.tmbase.domain.enums;public enum StatusEmail {
+package com.trackmed.tmbase.domain.enums;
+
+public enum StatusEmail {
+
+    SENT,
+    ERROR;
 }

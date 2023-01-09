@@ -10,10 +10,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.time.Instant;
 
 @ControllerAdvice
-public class UserExceptionHandler extends ResponseEntityExceptionHandler {
+public class BaseExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> standardError(UserException e, HttpServletRequest request) {
+    public ResponseEntity<Object> standardError(BaseException e, HttpServletRequest request) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
 
         StandardError error = new StandardError();

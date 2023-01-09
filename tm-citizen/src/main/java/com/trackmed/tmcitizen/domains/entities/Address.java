@@ -1,6 +1,7 @@
 package com.trackmed.tmcitizen.domains.entities;
 
 import com.trackmed.tmcitizen.domains.enums.Uf;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -21,6 +22,7 @@ public class Address implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "address_id")
     private UUID id;
 
     private String cep;
