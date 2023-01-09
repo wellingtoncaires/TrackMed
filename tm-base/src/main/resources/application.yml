@@ -6,7 +6,7 @@ spring:
       ddl-auto: update
 
 server:
-  port: 0
+  port: 1
 
 eureka:
   client:
